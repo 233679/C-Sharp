@@ -1,5 +1,8 @@
 using Newtonsoft.Json;
 using RestSharp;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Xml.Linq;
+using System.Text;
 
 namespace RestAPI
 {
@@ -26,8 +29,8 @@ namespace RestAPI
         /// <returns></returns>
         public static string getData()
         {
-            RestClient client = new RestClient("https://www.colourlovers.com/api/colors/new");
-            RestRequest restRequest = new RestRequest("?format=json");
+            RestClient client = new RestClient("https://api.artic.edu/api/v1");
+            RestRequest restRequest = new RestRequest("artworks");
 
             RestResponse response = client.Execute(restRequest);
 
@@ -46,9 +49,9 @@ namespace RestAPI
             Rootobject result = null_result;
             string data_buffer = "";
 
-            foreach (var data in result.Property1)
+            foreach (var data in result.data)
             {
-                data_buffer += (data.ToString() + "\n"); 
+                data_buffer += (data.ToString() + "\n");
             }
 
             return data_buffer;
@@ -56,42 +59,68 @@ namespace RestAPI
     }
 }
 
+
 public class Rootobject
 {
-    public Class1[] Property1 { get; set; }
+    public object preference { get; set; }
+    public Pagination pagination { get; set; }
+    public Datum[] data { get; set; }
+    public Info info { get; set; }
+    public Config config { get; set; }
 }
 
-public class Class1
+public class Pagination
 {
+    public int total { get; set; }
+    public int limit { get; set; }
+    public int offset { get; set; }
+    public int total_pages { get; set; }
+    public int current_page { get; set; }
+}
+
+public class Info
+{
+    public string license_text { get; set; }
+    public string[] license_links { get; set; }
+    public string version { get; set; }
+}
+
+public class Config
+{
+    public string iiif_url { get; set; }
+    public string website_url { get; set; }
+}
+
+public class Datum
+{
+    public float _score { get; set; }
     public int id { get; set; }
+    public string api_model { get; set; }
+    public string api_link { get; set; }
+    public bool is_boosted { get; set; }
     public string title { get; set; }
-    public string userName { get; set; }
-    public int numViews { get; set; }
-    public int numVotes { get; set; }
-    public int numComments { get; set; }
-    public int numHearts { get; set; }
-    public int rank { get; set; }
-    public string dateCreated { get; set; }
-    public string hex { get; set; }
-    public Rgb rgb { get; set; }
-    public Hsv hsv { get; set; }
-    public string description { get; set; }
-    public string url { get; set; }
-    public string imageUrl { get; set; }
-    public string badgeUrl { get; set; }
-    public string apiUrl { get; set; }
+    public Thumbnail thumbnail { get; set; }
+    public DateTime timestamp { get; set; }
+
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("Score: " + _score);
+        sb.Append("Id: " + id);
+        sb.Append("api_model:" + api_model);
+        sb.Append("api_link:" + api_link);
+        sb.Append("is_boosted" + is_boosted);
+        sb.Append("Title:" + title);
+        sb.Append("Thumbnail:" + thumbnail);
+        sb.Append("Timestamp:" + timestamp);
+        return sb.ToString();
+    }
 }
 
-public class Rgb
+public class Thumbnail
 {
-    public int red { get; set; }
-    public int green { get; set; }
-    public int blue { get; set; }
-}
-
-public class Hsv
-{
-    public int hue { get; set; }
-    public int saturation { get; set; }
-    public int value { get; set; }
+    public string lqip { get; set; }
+    public int width { get; set; }
+    public int height { get; set; }
+    public string alt_text { get; set; }
 }
