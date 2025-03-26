@@ -47,7 +47,7 @@ namespace RestAPI
             }
 
             Rootobject result = null_result;
-            string data_buffer = "";
+            string data_buffer = result.ToString();
 
             foreach (var data in result.data)
             {
@@ -59,7 +59,7 @@ namespace RestAPI
     }
 }
 
-
+[ToString]
 public class Rootobject
 {
     public object preference { get; set; }
@@ -69,6 +69,7 @@ public class Rootobject
     public Config config { get; set; }
 }
 
+[ToString]
 public class Pagination
 {
     public int total { get; set; }
@@ -78,6 +79,7 @@ public class Pagination
     public int current_page { get; set; }
 }
 
+[ToString]
 public class Info
 {
     public string license_text { get; set; }
@@ -85,12 +87,14 @@ public class Info
     public string version { get; set; }
 }
 
+[ToString]
 public class Config
 {
     public string iiif_url { get; set; }
     public string website_url { get; set; }
 }
 
+[ToString]
 public class Datum
 {
     public float _score { get; set; }
@@ -101,22 +105,9 @@ public class Datum
     public string title { get; set; }
     public Thumbnail thumbnail { get; set; }
     public DateTime timestamp { get; set; }
-
-    public override string ToString()
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.Append("Score: " + _score);
-        sb.Append("Id: " + id);
-        sb.Append("api_model:" + api_model);
-        sb.Append("api_link:" + api_link);
-        sb.Append("is_boosted" + is_boosted);
-        sb.Append("Title:" + title);
-        sb.Append("Thumbnail:" + thumbnail);
-        sb.Append("Timestamp:" + timestamp);
-        return sb.ToString();
-    }
 }
 
+[ToString]
 public class Thumbnail
 {
     public string lqip { get; set; }
